@@ -42,19 +42,19 @@ public class PostagemController {
 	
 	//Fazendo um novo get por id. Vamos usar uma subrota
 	@GetMapping("/{id}")// "/{id}" é uma variável da minha subrota.
-	public ResponseEntity <Postagem> GetId(@PathVariable Long id){
+	public ResponseEntity <Postagem> getById(@PathVariable Long id){
 		return repository.findById(id)
 				.map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
 	@GetMapping("/titulo/{titulo}")
-	public ResponseEntity <List<Postagem>> GetByTitulo (@PathVariable String titulo){
+	public ResponseEntity <List<Postagem>> getByTitulo (@PathVariable String titulo){
 		return ResponseEntity.ok(repository.findAllByTituloContainingIgnoreCase(titulo));
 	}
 	
 	@PostMapping //criar
-	public ResponseEntity<Postagem> adicionaPostagem(@RequestBody Postagem postagem){
+	public ResponseEntity<Postagem> post(@RequestBody Postagem postagem){
 		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(postagem));
 	}
 	/*
