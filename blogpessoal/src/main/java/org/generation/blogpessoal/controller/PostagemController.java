@@ -36,7 +36,7 @@ public class PostagemController {
 	private PostagemRepository repository;	//isso é o apelido da instância
 	
 	@GetMapping//indica o verbo http que pode ser utilizado no endpoint. Neste caso --> (Get)
-	public ResponseEntity<List<Postagem>> GetAll(){ //GetAll é o nome da função. Ou seja, posso colocar qualquer um.
+	public ResponseEntity<List<Postagem>> getAll(){ //GetAll é o nome da função. Ou seja, posso colocar qualquer um.
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
