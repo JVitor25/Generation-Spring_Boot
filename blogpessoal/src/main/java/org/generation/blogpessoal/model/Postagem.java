@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 // versão bombada do NotNull:NotBlank --> import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -29,7 +31,8 @@ public class Postagem {
 	
 	private String texto;
 	
-	private Date data;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date data = new java.sql.Date(System.currentTimeMillis());
 
 	// Get & Set
 	public Long getId() {
