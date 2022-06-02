@@ -24,8 +24,11 @@ public class Categoria {
 	@NotNull
 	private String nomeCategoria;
 
-	@OneToMany(mappedBy="categoria", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("categoria")
+	@OneToMany(mappedBy="categoria", cascade = CascadeType.ALL)//"categoria" refere-se ao nome do objetvo(public class ...)
+	/* se for .ALL todos produtos vão ser atualizados.
+	 * se for .REMOVE todos produtos vão ser removidos (quando editarmos esse objeto). 
+	 */
+	@JsonIgnoreProperties("categoria")//"categoria" refere-se à tabela criada no produto. Para envitar recursividade.
 	private List<Produto> produto;
 
 	
