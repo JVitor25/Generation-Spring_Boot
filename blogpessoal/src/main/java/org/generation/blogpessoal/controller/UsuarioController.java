@@ -26,7 +26,7 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 	
-	@GetMapping
+	/*@GetMapping
 	public ResponseEntity<List<Usuario>> getAll(){
 		return ResponseEntity.ok(usuarioService.findAll());
 	}
@@ -35,7 +35,7 @@ public class UsuarioController {
 	public ResponseEntity<Usuario> getById(@PathVariable long id){
 		return usuarioService.findById(id).map(resp -> ResponseEntity.ok(resp))
 			.orElse(ResponseEntity.notFound().build());	
-	}
+	}*/
 	
 	@PostMapping("/logar")
 	public ResponseEntity<UserLogin> Autentication(@RequestBody Optional<UserLogin> user){
@@ -46,7 +46,7 @@ public class UsuarioController {
 	@PostMapping("/cadastrar")
 	public ResponseEntity<Usuario> post(@RequestBody Usuario usuario){
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(usuarioService.cadastrarUsuario(usuario));
+				.body(usuarioService.CadastrarUsuario(usuario));
 	}
 	
 }
