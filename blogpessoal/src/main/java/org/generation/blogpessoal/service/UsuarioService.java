@@ -85,8 +85,7 @@ public class UsuarioService {
 
 			if (buscaUsuario.isPresent()) {				
 				if (buscaUsuario.get().getId() != usuario.getId())
-				throw new ResponseStatusException(
-					HttpStatus.BAD_REQUEST, "O Usuário já existe!", null);
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O Usuário já existe!", null);
 			}
 			
 			usuario.setSenha(criptografarSenha(usuario.getSenha()));
