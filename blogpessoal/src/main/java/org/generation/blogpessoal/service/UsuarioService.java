@@ -40,7 +40,7 @@ public class UsuarioService {
 				user.get().setId(usuario.get().getId());
 				user.get().setToken(gerarBasicToken(user.get().getUsuario(), user.get().getSenha()));
 				user.get().setNome(usuario.get().getNome());
-				//user.get().setFoto(usuario.get().getFoto());
+				user.get().setFoto(usuario.get().getFoto());
 				user.get().setSenha(usuario.get().getSenha());
 				
 				return user;
@@ -69,21 +69,20 @@ public class UsuarioService {
 		return Optional.empty();
 	}	
 	
+	
 	private String criptografarSenha(String senha) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();		
 		return encoder.encode(senha);
 	}
 	
+	
 	private boolean compararSenhas(String senhaDigitada, String senhaBanco) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		
 		return encoder.matches(senhaDigitada, senhaBanco);
 	}
 	
+	
 	private String gerarBasicToken(String usuario, String senha) {
-		//email --> user.get().getUsuario()
-		//password --> user.get().getSenha()
 		String tokenBase = usuario + ":" + senha;
 		byte[] tokenBase64 = Base64.encodeBase64(tokenBase.getBytes(Charset.forName("US-ASCII")));
 		return "Basic " + new String(tokenBase64);

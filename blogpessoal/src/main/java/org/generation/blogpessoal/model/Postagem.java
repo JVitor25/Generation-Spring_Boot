@@ -15,20 +15,14 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-/* Indica para o Spring que o objeto criado
-vai se tornar uma tabela no banco de dados. */
 @Entity
-
-// Indica o nome dessa tabela.
 @Table(name="tb_postagens")
 public class Postagem {
-	// Indica que o campo ID será uma chave primária.
+
 	@Id
-	// Cria o AutoIncremente da Primary Key. 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	// Vai deixar o campo obrigatório. 
 	@NotNull
 	private String titulo;
 	
@@ -47,8 +41,6 @@ public class Postagem {
 
 	
 	// Get & Set
-	
-	
 	public Long getId() {
 		return id;
 	}
