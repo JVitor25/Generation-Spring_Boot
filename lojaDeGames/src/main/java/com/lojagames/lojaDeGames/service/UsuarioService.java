@@ -20,7 +20,9 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository repository;
 	
+	/*
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario){
+	
 		if(repository.findByUsuario(usuario.getUsuario()).isPresent()) {
 			return Optional.empty();
 		}
@@ -29,7 +31,11 @@ public class UsuarioService {
 		return Optional.of(repository.save(usuario));
 	}
 	
+	public Usuario 
+	
+	
 	public Optional<UserLogin> autenticarUsuario(Optional<UserLogin> user){
+		
 		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
 		
 		if(usuario.isPresent()) {
@@ -44,6 +50,7 @@ public class UsuarioService {
 		
 		return Optional.empty();
 	}
+	
 	
 	public Optional<Usuario> atualizarUsuario(Usuario usuario){
 		if(repository.findById(usuario.getId()).isPresent()) {
@@ -63,6 +70,9 @@ public class UsuarioService {
 		return Optional.empty();
 	}
 	
+	
+	
+	
 	private String criptografarSenha(String senha) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -75,9 +85,61 @@ public class UsuarioService {
 		return encoder.matches(senhaDigitada, senhaBanco);
 	}
 	
-	private String gerarBasicToken(String email, String password) {
-		String tokenBase = email + ":" + password;
+	/*private String gerarBasicToken(String usuario, String password) {
+		String tokenBase = usuario + ":" + password;
 		byte[] tokenBase64 = Base64.encodeBase64(tokenBase.getBytes(Charset.forName("US-ASCII")));
 		return "Basic " + new String(tokenBase64);
+	}*/
+	
+	
+	public Usuario cadastrarUsuario(Usuario usuario) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		
+		String senhaEncoder = encoder.encode(usuario.getSenha());
+		usuario.setSenha(senhaEncoder);
+		
+		return repository.save(usuario);
+	}
+	
+	public Optional<UserLogin> autenticarUsuario(Optional<UserLogin> user){
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
+		
+		if(usuario.isPresent()){
+			if(encoder.matches(user.get().getSenha(),usuario.get().getSenha())) {
+
+				String auth = user.get().getUsuario() + ":" + user.get().getSenha();
+				byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+				String authHeader = "Basic " + new String(encodedAuth);
+				
+				user.get().setToken(authHeader);
+				user.get().setNome(usuario.get().getNome());
+				
+				return user;
+			}
+		}
+		return null;
+	}
+	
+	public Optional<Usuario> atualizarUsuario(Usuario usuario){
+		if(repository.findById(usuario.getId()).isPresent()) {
+			
+			Optional<Usuario> buscaUsuario = repository.findByUsuario(usuario.getUsuario());
+			
+			if(buscaUsuario.isPresent()) {
+				if(buscaUsuario.get().getId() != usuario.getId())
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O Usuário já existe!", null);
+			}
+			
+			
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			
+			String senhaEncoder = encoder.encode(usuario.getSenha());
+			usuario.setSenha(senhaEncoder);
+			
+			return Optional.of(repository.save(usuario));
+		}
+		
+		return Optional.empty();
 	}
 }

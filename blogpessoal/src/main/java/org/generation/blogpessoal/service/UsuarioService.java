@@ -15,65 +15,38 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UsuarioService {
-	/*
-	 * Todo código comentar é da vídeo Aula, 
-	 * e o que foi aplicado e que está sendo 
-	 * executado é o da live-code com o Luís.
-	 */
-	
+
 	@Autowired
 	private UsuarioRepository repository;
 	
-	//public Usuario cadastrarUsuario(Usuario usuario) {
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
-		
-		/*BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		 *
-		 *String senhaEncoder = encoder.encode(usuario.getSenha());
-		 * usuario.setSenha(senhaEncoder);
-		 * 
-		 * return repository.save(usuario);
-		 */
-		
 		if (repository.findByUsuario(usuario.getUsuario()).isPresent()) {
 			return Optional.empty();
 		}
 			
 		usuario.setSenha(criptografarSenha(usuario.getSenha()));
+		
 		return Optional.of(repository.save(usuario));
 	}
 	
+	
 	public Optional<UserLogin> autenticarUsuario(Optional<UserLogin> user){
-		//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
 		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
 		
-		if(usuario.isPresent()) {
-			//if(encoder.matches(user.get().getSenha(),usuario.get().getSenha())){
+		if(usuario.isPresent()){
 			if(compararSenhas(user.get().getSenha(),usuario.get().getSenha())){
 				
-				/*
-				 * String auth = user.get().getUsuario() + ":" + user.get().getSenha();
-				 * byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
-				 * String authHeader = "Basic " + new String(encodedAuth);
-				 * 
-				 * user.get().setToken(authHeader);
-				 * user.get().setNome(usuario.get().getNome());
-				 * user.get().setSenha(usuario.get().getSenha());
-				 */
-				
-				//user.get().setId(usuario.get().getId());				
-				user.get().setNome(usuario.get().getNome());
-				user.get().setSenha(usuario.get().getSenha());
+				user.get().setId(usuario.get().getId());
 				user.get().setToken(gerarBasicToken(user.get().getUsuario(), user.get().getSenha()));
-				
-				
-				
+				user.get().setNome(usuario.get().getNome());
+				//user.get().setFoto(usuario.get().getFoto());
+				user.get().setSenha(usuario.get().getSenha());
 				
 				return user;
 			}
 		}
 		
-		//return null;
 		return Optional.empty();
 	}
 	
@@ -90,31 +63,28 @@ public class UsuarioService {
 			
 			usuario.setSenha(criptografarSenha(usuario.getSenha()));
 
-			return Optional.of(repository.save(usuario));
+			return Optional.ofNullable(repository.save(usuario));
 		} 
-			
+		
 		return Optional.empty();
 	}	
 	
-	// Para substituir: BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	private String criptografarSenha(String senha) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
 		return encoder.encode(senha);
 	}
 	
-	// Substituindo algumas coisas do Autenticar Usuário
 	private boolean compararSenhas(String senhaDigitada, String senhaBanco) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
 		return encoder.matches(senhaDigitada, senhaBanco);
 	}
 	
-	// Substituindo algumas coisas do Autenticar Usuário
-	private String gerarBasicToken(String email, String password) {
+	private String gerarBasicToken(String usuario, String senha) {
 		//email --> user.get().getUsuario()
 		//password --> user.get().getSenha()
-		String tokenBase = email + ":" + password;
+		String tokenBase = usuario + ":" + senha;
 		byte[] tokenBase64 = Base64.encodeBase64(tokenBase.getBytes(Charset.forName("US-ASCII")));
 		return "Basic " + new String(tokenBase64);
 	}
