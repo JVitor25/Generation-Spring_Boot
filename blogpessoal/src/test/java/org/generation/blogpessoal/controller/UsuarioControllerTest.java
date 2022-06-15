@@ -93,8 +93,8 @@ public class UsuarioControllerTest {
 				.exchange("/usuarios/atualizar",HttpMethod.PUT,requisicao,Usuario.class);
 		
 		assertEquals(HttpStatus.OK,resposta.getStatusCodeValue());
-		assertEquals(usuarioUpdate.getNome(),resposta.getBody().getNome());
-		assertEquals(usuarioUpdate.getUsuario(),resposta.getBody().getUsuario());
+		assertEquals(requisicao.getBody().getNome(), resposta.getBody().getNome());
+		assertEquals(requisicao.getBody().getUsuario(), resposta.getBody().getUsuario());
 	}
 	
 	@Test
