@@ -48,8 +48,8 @@ public class UsuarioControllerTest {
 	@DisplayName("Cadastrar um Usuário")
 	public void deveCriarUmUsuario() {
 		
-		HttpEntity<Usuario> requisicao = new HttpEntity<Usuario>(new Usuario (
-				0L,"Paulo Antunes","paulo@gmail.com","12345678","https://i.imgur.com/JR7kUFU.jpg"));
+		HttpEntity<Usuario> requisicao = new HttpEntity<Usuario>(new Usuario (0L,
+				"Paulo Antunes","paulo@gmail.com","12345678","https://i.imgur.com/JR7kUFU.jpg"));
 		
 		ResponseEntity<Usuario> resposta = testRestTemplate.exchange(
 				"/usuarios/cadastrar", HttpMethod.POST,requisicao,Usuario.class);
@@ -116,11 +116,11 @@ public class UsuarioControllerTest {
 	
 	@Test
 	@Order(5)
-	@DisplayName("Listar um Usuário Específoco")
+	@DisplayName("Listar um Usuário Específico")
 	public void deveListarApenasUmUsuario() {
 		
 		Optional<Usuario> usuarioProcura = usuarioService.cadastrarUsuario(new Usuario(0L, 
-				"Laura Santolia", "laura_santolia@gmail.com.br", "laura12345", "https://i.imgur.com/EcJG8kB.jpg"));
+				"Laura Santolia", "laura_santolia@gmail.com", "laura12345", "https://i.imgur.com/EcJG8kB.jpg"));
 		
 		ResponseEntity<String> resposta = testRestTemplate
 				.withBasicAuth("root", "root")
@@ -141,7 +141,7 @@ public class UsuarioControllerTest {
 				"", "marisa_souza@gmail.com.br", "12332144", "", ""));
 		
 		ResponseEntity<UserLogin> resposta = testRestTemplate
-			.exchange("/usuarios/logar", HttpMethod.POST, requisicao, UserLogin.class);
+				.exchange("/usuarios/logar", HttpMethod.POST, requisicao, UserLogin.class);
 		
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
 	}
