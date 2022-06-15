@@ -92,7 +92,7 @@ public class UsuarioControllerTest {
 				.withBasicAuth("root","root")
 				.exchange("/usuarios/atualizar",HttpMethod.PUT,requisicao,Usuario.class);
 		
-		assertEquals(HttpStatus.OK,resposta.getStatusCodeValue());
+		assertEquals(HttpStatus.OK,resposta.getStatusCode());
 		assertEquals(requisicao.getBody().getNome(), resposta.getBody().getNome());
 		assertEquals(requisicao.getBody().getUsuario(), resposta.getBody().getUsuario());
 	}
@@ -135,7 +135,7 @@ public class UsuarioControllerTest {
 	public void deveAutenticarUsuario() {
 		
 		usuarioService.cadastrarUsuario(new Usuario(0L, 
-				"Marisa Souza", "marisa_souza@gmail.com.br", "123321144", "https://i.imgur.com/T12NIp9.jpg"));
+				"Marisa Souza", "marisa_souza@gmail.com.br", "12332144", "https://i.imgur.com/T12NIp9.jpg"));
 		
 		HttpEntity<UserLogin> requisicao = new HttpEntity<UserLogin>(new UserLogin(0L,
 				"", "marisa_souza@gmail.com.br", "12332144", "", ""));
@@ -147,4 +147,3 @@ public class UsuarioControllerTest {
 	}
 
 }
-

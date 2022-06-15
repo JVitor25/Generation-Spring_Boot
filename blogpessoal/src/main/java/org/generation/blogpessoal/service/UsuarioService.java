@@ -17,22 +17,22 @@ import org.springframework.web.server.ResponseStatusException;
 public class UsuarioService {
 
 	@Autowired
-	private UsuarioRepository repository;
+	private UsuarioRepository usuarioRepository;
 	
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
-		if (repository.findByUsuario(usuario.getUsuario()).isPresent()) {
+		if (usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent()) {
 			return Optional.empty();
 		}
 			
 		usuario.setSenha(criptografarSenha(usuario.getSenha()));
 		
-		return Optional.of(repository.save(usuario));
+		return Optional.of(usuarioRepository.save(usuario));
 	}
 	
 	
 	public Optional<UserLogin> autenticarUsuario(Optional<UserLogin> user){
 
-		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
+		Optional<Usuario> usuario = usuarioRepository.findByUsuario(user.get().getUsuario());
 		
 		if(usuario.isPresent()){
 			if(compararSenhas(user.get().getSenha(),usuario.get().getSenha())){
@@ -52,9 +52,9 @@ public class UsuarioService {
 	
 	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
 
-		if (repository.findById(usuario.getId()).isPresent()) {
+		if (usuarioRepository.findById(usuario.getId()).isPresent()) {
 			
-			Optional<Usuario> buscaUsuario = repository.findByUsuario(usuario.getUsuario());
+			Optional<Usuario> buscaUsuario = usuarioRepository.findByUsuario(usuario.getUsuario());
 
 			if (buscaUsuario.isPresent()) {				
 				if (buscaUsuario.get().getId() != usuario.getId())
@@ -63,11 +63,11 @@ public class UsuarioService {
 			
 			usuario.setSenha(criptografarSenha(usuario.getSenha()));
 
-			return Optional.ofNullable(repository.save(usuario));
+			return Optional.ofNullable(usuarioRepository.save(usuario));
 		} 
 		
 		return Optional.empty();
-	}	
+	}
 	
 	
 	private String criptografarSenha(String senha) {
